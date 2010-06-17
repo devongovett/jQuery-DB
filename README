@@ -1,0 +1,95 @@
+jQuery DB - A JavaScript data store queried by jQuery-like selectors
+By Devon Govett
+Licence: Do whatever you want, just fork and hack away!
+
+/******************
+ ** DOCUMENTATION
+ *****************/
+
+Step 1: Create a data store
+	var db = new DataStore("awesome");
+	
+Step 2: Create some records and add them to the database
+	db.create({
+		foo: "bar",
+		hello: "world"
+	}).appendTo("awesome");
+	
+Step 3: Find some records
+	var records = db.get("awesome[foo=bar]")
+	
+Step 4: Do stuff with the records
+	records.update("hello", "coder");
+	
+Step 5: Bind an event to be notified when data changes
+	db.bind("awesome[hello!=coder]", function(event) {
+		//do stuff (see Mutation Events, below, for details on the event object)
+	});
+	
+	
+/**************
+ ** SELECTORS
+ *************/
+ 
+Table selector
+ 	db.get("tablename") //get all records in table
+ 	
+Attribute selector
+ 	db.get("tablename[attr=value]") //get records in tablename whose attribute "attr" equals "value"
+ 	db.get("tablename[attr=value]") //get records in tablename whose attribute "attr" does not equal "value"
+ 	db.get("tablename[attr^=value]") //get records in tablename whose attribute "attr" starts with "value"
+ 	db.get("tablename[attr$=value]") //get records in tablename whose attribute "attr" ends with "value"
+ 	db.get("tablename[attr=value]") //get records in tablename whose attribute "attr" contains "value"
+
+Filter selectors
+	db.get("tablename:first") //get the first record in tablename
+	db.get("tablename:last") //get the last record in tablename
+	db.get("tablename:even") //get all of the even indexed records in tablename
+	db.get("tablename:odd") //get all of the odd indexed records in tablename
+	db.get("tablename:eq(5)") //get the 5th record in tablename
+	db.get("tablename:gt(5)") //get all of the the records with an index greater than 5 in tablename
+	db.get("tablename:lt(5)") //get all of the the records with an index less than 5 in tablename
+	
+	
+/*************************
+ ** RESULT SET OPERATIONS
+ ************************/
+ 
+Loop through each record in the set
+ 	set.each(function(i) {
+ 		//do stuff
+ 	});
+ 	
+Get a specific record
+ 	set[index] //get the record at index from set
+ 	set.eq(index) //ditto
+ 	
+Filter the set
+ 	set.filter(":odd") //filter the set by a string selector
+ 	set.filter(function(i) { return i % 2; }) //filter the set by a function
+ 	
+Get a specific property from all records in the set
+ 	set.map("name") //return an array of all name properties in the set
+ 	set.map(function() { return this.name; }) //ditto
+ 	
+Update all records in the set
+ 	set.update(prop, val) //update all records in the set, setting prop to val
+ 	set.update({ foo: "bar", hello: "world" }) //update set with all changes in the hash
+ 	
+Remove all records from the set	
+	set.remove()
+	 
+Add records to a table
+	set.appendTo(tablename) //append the records in the set to tablename
+	set.prependTo(tablename) //prepend the records in the set to tablename
+	set.insertInto(tablename, index);
+ 	
+ 
+ /********************
+  ** MUTATION EVENTS
+  *******************/
+  
+Mutation events (received from db.bind, see above) have the following properties
+	type: one of the mutation types (append, prepend, insert, update, or remove)
+	index: an array of modified indexes for insert update and remove events
+	data: an array of objects being inserted for append, prepend and insert events
