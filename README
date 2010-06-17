@@ -36,10 +36,10 @@ Table selector
  	
 Attribute selector
  	db.get("tablename[attr=value]") //get records in tablename whose attribute "attr" equals "value"
- 	db.get("tablename[attr=value]") //get records in tablename whose attribute "attr" does not equal "value"
+ 	db.get("tablename[attr!=value]") //get records in tablename whose attribute "attr" does not equal "value"
  	db.get("tablename[attr^=value]") //get records in tablename whose attribute "attr" starts with "value"
  	db.get("tablename[attr$=value]") //get records in tablename whose attribute "attr" ends with "value"
- 	db.get("tablename[attr=value]") //get records in tablename whose attribute "attr" contains "value"
+ 	db.get("tablename[attr*=value]") //get records in tablename whose attribute "attr" contains "value"
 
 Filter selectors
 	db.get("tablename:first") //get the first record in tablename
